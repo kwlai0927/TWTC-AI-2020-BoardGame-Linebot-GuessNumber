@@ -20,6 +20,8 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
+from guess_number import Guesser
+
 app = Flask(__name__)
 
 line_bot_api = LineBotApi(os.environ.get('LINE_CHANNEL_ACCESS_TOKEN'))
@@ -33,7 +35,8 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
+    print("Request body: " + body)
+    #app.logger.info("Request body: " + body)
 
     # handle webhook body
     try:
@@ -47,9 +50,23 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    message = ""
+    
+    _guesser = Guesser.all_guessers.setdefault(event.reply_token, Guesser())
+    if _guesser.state == 'from':
+        message = '請輸入起始數字：'
+    elif _guesser.state == 'to':
+        message = '請輸入結束數字:'
+    elif _guesser.state == 'guess':
+        message = _guesser.feedback(event.message.text)
+        
+    if _guesser.state == 'end':
+        del Guesser.all_guessers[event.reply_token]
+        
+    text = f'{message}\n{event.reply_token}'
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(text=text))
 
 
 if __name__ == "__main__":
