@@ -51,9 +51,8 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
-    
-    if event.source.userId:
-        _guesser = Guesser.all_guessers.setdefault(event.source.userId, Guesser())
+    if event.source.user_id:
+        _guesser = Guesser.all_guessers.setdefault(event.source.user_id, Guesser())
         if _guesser.state == 'from':
             message = '請輸入起始數字：'
             
@@ -64,9 +63,9 @@ def handle_message(event):
             message = _guesser.feedback(event.message.text)
             
         if _guesser.state == 'end':
-            del Guesser.all_guessers[event.source.userId]
+            del Guesser.all_guessers[event.source.user_id]
             
-        message = f'{message}\n{event.source.userId}'
+        message = f'{message}\n{event.source.user_id}'
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=message))
