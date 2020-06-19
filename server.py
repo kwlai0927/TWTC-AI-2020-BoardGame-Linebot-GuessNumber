@@ -54,7 +54,7 @@ def handle_message(event):
     if event.source.user_id:
         _guesser = Guesser.all_guessers.setdefault(event.source.user_id, Guesser())
         if _guesser.state == 'init':
-            message = '請輸入起始數字：'
+            message = '請輸入起始數字:\n{event.source.user_id}'
             _guesser.state = 'from'
         elif _guesser.state == 'from':
             f = event.message.text
