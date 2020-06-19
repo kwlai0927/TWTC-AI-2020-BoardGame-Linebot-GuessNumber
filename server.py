@@ -52,16 +52,18 @@ def callback():
 def handle_message(event):
     message = ""
     
-    _guesser = Guesser.all_guessers.setdefault(event.reply_token, Guesser())
+    _guesser = Guesser.all_guessers.setdefault(event.source.userId, Guesser())
     if _guesser.state == 'from':
         message = '請輸入起始數字：'
+        
     elif _guesser.state == 'to':
         message = '請輸入結束數字:'
+        
     elif _guesser.state == 'guess':
         message = _guesser.feedback(event.message.text)
         
     if _guesser.state == 'end':
-        del Guesser.all_guessers[event.reply_token]
+        del Guesser.all_guessers[event.source.userId]
         
     text = f'{message}\n{event.reply_token}'
     line_bot_api.reply_message(
