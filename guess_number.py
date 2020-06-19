@@ -112,12 +112,12 @@ class Guesser:
         self._count = 0
 
     def setRange(self, f = None, t = None):
-        if int(f):
+        if f:
             self._from = f
             self._f = f
             self.state = "from"
             
-        if int(t):
+        if t:
             self._to = t
             self._t = t
             self.state = "to"

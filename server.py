@@ -62,7 +62,6 @@ def handle_message(event):
                 _guesser.setRange(f = f)
                 message = f'起始數字為{f}\n請輸入結束數字:'
                 _guesser.state == 'to'
-
             else:
                 message = '輸入格式錯誤，請輸入起始數字：'
         elif _guesser.state == 'to':
