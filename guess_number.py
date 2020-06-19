@@ -61,7 +61,7 @@ class Guesser:
         "emm……",
         "水逆日！(╯°□°）╯︵ ┻━┻", 
         "保持微笑",
-        "......"
+        "......",
         "...",
         "尬電"
     ]
@@ -74,7 +74,7 @@ class Guesser:
         "我就爛！",
         "生無可戀...",
         "繼續旋轉我沒關係",
-        "媽的了....&%**&￥#@*#&（消音）到底是多少啦！（抓頭）"
+        "媽的了....&%**&￥#@*#&（消音）到底是多少啦！（抓頭）",
         "用盡大半青春和你對猜，我得到了什麼啊！！"
     ]
 
@@ -104,7 +104,7 @@ class Guesser:
 
 
     def __init__(self):
-        self.state = "from"
+        self.state = "init"
         self._from = None
         self._to = None
         self._exp = None
@@ -115,12 +115,12 @@ class Guesser:
         if int(f):
             self._from = f
             self._f = f
-            self.state = "to"
+            self.state = "from"
             
         if int(t):
             self._to = t
             self._t = t
-            self.state = "guess"
+            self.state = "to"
             
         if self._f and self._t and self._t >= self._f:
             interval = self._t - self._f

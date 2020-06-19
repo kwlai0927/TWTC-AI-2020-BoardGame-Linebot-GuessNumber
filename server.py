@@ -53,19 +53,35 @@ def handle_message(event):
     message = event.message.text
     if event.source.user_id:
         _guesser = Guesser.all_guessers.setdefault(event.source.user_id, Guesser())
-        if _guesser.state == 'from':
+        if _guesser.state == 'init':
             message = '請輸入起始數字：'
-            
+            _guesser.state = 'from'
+        if _guesser.state == 'from':
+            f = int(event.message.text)
+            if f:
+                _guesser.setRange(f = f)
+                message = f'起始數字為{f}\n請輸入結束數字:'
+                _guesser.state == 'to'
+
+            else:
+                message = '輸入格式錯誤，請輸入起始數字：'
         elif _guesser.state == 'to':
-            message = '請輸入結束數字:'
-            
+            t = int(event.message.text)
+            if t:
+                _guesser.setRange(t = t)
+                message = f'結束數字為{t}\n開始囉～:'
+                _guesser.state == 'guess'
+                message = _guesser.feedback(event.message.text)
+
+            else:
+                message = '輸入格式錯誤，請重新輸入結束數字：'
         elif _guesser.state == 'guess':
             message = _guesser.feedback(event.message.text)
             
         if _guesser.state == 'end':
             del Guesser.all_guessers[event.source.user_id]
             
-        message = f'{message}\n{event.source.user_id}'
+        #message = f'{message}\n{event.source.user_id}'
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=message))
