@@ -56,7 +56,7 @@ def handle_message(event):
         if _guesser.state == 'init':
             message = '請輸入起始數字：'
             _guesser.state = 'from'
-        if _guesser.state == 'from':
+        elif _guesser.state == 'from':
             f = int(event.message.text)
             if f:
                 _guesser.setRange(f = f)
