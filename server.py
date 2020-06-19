@@ -65,7 +65,7 @@ def handle_message(event):
     if _guesser.state == 'end':
         del Guesser.all_guessers[event.source.userId]
         
-    text = f'{message}\n{event.reply_token}'
+    text = f'{message}\n{event.source.userId}'
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=text))
